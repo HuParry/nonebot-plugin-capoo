@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "nonebot-plugin-capoo"
+version = "0.0.4"
+description = "一个发送 capoo 表情包的插件"
+authors = ["HuParry <huparry@outlook.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "nonebot_plugin_capoo"}]
+homepage = "https://github.com/HuParry/nonebot-plugin-capoo"
+repository = "https://github.com/HuParry/nonebot-plugin-capoo"
+
+
+[tool.poetry.dependencies]
+python = "^3.8"
+nonebot2 = "^2.0.0"
+nonebot-adapter-onebot = "^2.2.3"
+asyncio = "^3.4.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

@@ -24,7 +24,7 @@ __plugin_meta__ = PluginMetadata(
         "unique_name": "capoo",
         "example": "capoo",
         "author": "HuParry <huparry@outlook.com>",
-        "version": "0.0.5",
+        "version": "0.0.6",
     }
 )
 capoo_download = bool

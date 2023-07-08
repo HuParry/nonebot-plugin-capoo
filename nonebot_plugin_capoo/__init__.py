@@ -20,12 +20,6 @@ __plugin_meta__ = PluginMetadata(
     homepage="https://github.com/HuParry/nonebot-plugin-capoo",
     config=Config,
     supported_adapters = {"nonebot.adapters.onebot.v11"},
-    extra = {
-        "unique_name": "capoo",
-        "example": "capoo",
-        "author": "HuParry <huparry@outlook.com>",
-        "version": "0.0.6",
-    }
 )
 capoo_download = bool
 driver = get_driver()

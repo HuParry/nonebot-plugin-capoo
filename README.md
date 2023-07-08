@@ -85,3 +85,8 @@ capoo 实在是太可爱了，所以我收集了几百张 capoo 的表情包。�
 
 ### 效果图
 <img src="./docs/preview.jpg" style="zoom:30%;" />
+
+## TODO
+- [x] 指令触发 bot 发送图片
+- [ ] 在 QQ 上让 bot 存储 capoo 图片
+- [ ] 每次存储图片，判断图片是否已经存在，避免重复加入

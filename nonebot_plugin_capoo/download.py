@@ -2,7 +2,6 @@ import asyncio
 import httpx
 
 from nonebot.log import logger
-from nonebot import get_driver
 import sqlite3
 import hashlib
 import os
@@ -46,7 +45,6 @@ async def check_resources():
             img_url TEXT
         )
     ''')
-    capoo_pic2_list = os.listdir(str(capoo_pic2_path))
 
     for i in range(1, capoo_list_len + 1) :
         file_name = capoo_filename.format(index=str(i))
@@ -72,6 +70,7 @@ async def check_resources():
         except Exception as e:
             logger.warning(str(e))
     
+    capoo_pic2_list = os.listdir(str(capoo_pic2_path))
     for file_name in capoo_pic2_list:
         with file_path.open("rb") as f:
             data = f.read()

@@ -92,10 +92,16 @@ capoo 实在是太可爱了，所以我收集了几百张 capoo 的表情包。�
 
 注意 `添加capoo` 指令在配置项 `capoo_download` 为 False 时将不生效。
 
-`添加capoo` 指令会将图片储存至 `data/capoo/your_picture` 下。
+`添加capoo` 指令会将图片储存至 `data/capoo/your_picture` 下，你可以放置图片在这个文件夹里面，插件启动后会检验这里面的图片文件。
 
 ### 效果图
+#### `capoo` 指令
 <img src="./docs/preview.jpg" style="zoom:30%;" />
+
+#### `添加capoo` 指令
+<img src="./docs/preview2.jpg" style="zoom:30%;" />
+
+<img src="./docs/preview3.jpg" style="zoom:30%;" />
 
 ## TODO
 - [x] 指令触发 bot 发送图片

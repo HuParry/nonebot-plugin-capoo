@@ -1,4 +1,3 @@
-from nonebot.log import logger
 import sqlite3
 
 # 数据库中存的是 md5 码和 picture以capoo为根目录的路径

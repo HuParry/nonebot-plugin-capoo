@@ -7,7 +7,6 @@ def check_md5(conn: sqlite3.Connection, cursor: sqlite3.Cursor, fmd5: str, pic_n
         
     status = cursor.fetchone()
     if status is not None:
-        logger.info(f"文件夹中有相同的图片，本张照片跳过")
         return False
     
     cursor.execute('INSERT INTO Picture (md5, img_url) VALUES (?, ?)', (fmd5, pic_name))

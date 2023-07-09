@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "nonebot-plugin-capoo"
-version = "0.0.6"
+version = "0.1.0"
 description = "一个发送 capoo 表情包的插件"
 authors = ["HuParry <huparry@outlook.com>"]
 license = "MIT"

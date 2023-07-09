@@ -1,10 +1,15 @@
 import asyncio
 import httpx
-from pathlib import Path
+
 from nonebot.log import logger
 from nonebot import get_driver
+import sqlite3
+import hashlib
+import os
+from .sqlite import check_md5
+from .config import capoo_pic_path, capoo_path, \
+    capoo_filename, capoo_pic, capoo_pic2_path
 
-capoo_path = Path() / "data" / "capoo"
 capoo_list_len = 456
 async def download_url(url: str) -> bytes:
     async with httpx.AsyncClient() as client:
@@ -26,19 +31,37 @@ async def download_resources(path: str) -> bytes:
     return await download_url(resource_url(path))
 
 async def check_resources():
-    if capoo_path.exists():
-        return
-    logger.info(f"未找到capoo文件夹，准备创建/data/capoo文件夹...")
-    capoo_path.mkdir(parents=True, exist_ok=True)
+    if not capoo_pic_path.exists():
+        logger.info(f"未找到capoo文件夹，准备创建/capoo/picture文件夹...")
+        capoo_pic_path.mkdir(parents=True, exist_ok=True)
+    
+    if not capoo_pic2_path.exists():
+        logger.info(f"未找到capoo2文件夹，准备创建/capoo/your_picture文件夹...")
+        capoo_pic2_path.mkdir(parents=True, exist_ok=True)
+    conn = sqlite3.connect(capoo_path / 'md5.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS Picture (
+            md5 TEXT PRIMARY KEY,
+            img_url TEXT
+        )
+    ''')
+
     for i in range(1, capoo_list_len + 1) :
-        file_name = f"capoo ({i}).gif"
-        file_path = capoo_path / file_name
+        file_name = capoo_filename.format(index=str(i))
+        file_path = capoo_pic_path / file_name
         if file_path.exists():
             continue
         logger.info(f"Downloading {file_name} ...")
         try:
             data = await download_resources(file_name)
+            fmd5 = hashlib.md5(data).hexdigest()
+            
+            if (not check_md5(conn, cursor, fmd5, f"{capoo_pic}/{capoo_filename.format(index=str(i))}")) :
+                continue
+
             with file_path.open("wb") as f:
                 f.write(data)
+
         except Exception as e:
             logger.warning(str(e))

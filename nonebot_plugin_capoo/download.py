@@ -52,6 +52,9 @@ async def check_resources():
         file_name = capoo_filename.format(index=str(i))
         file_path = capoo_pic_path / file_name
         if file_path.exists():
+            with file_path.open("rb") as f:
+                data = f.read()
+            fmd5 = hashlib.md5(data).hexdigest()
             check_md5(conn, cursor, fmd5, f"{capoo_pic}/{capoo_filename.format(index=str(i))}")
             continue
         logger.info(f"Downloading {file_name} ...")
@@ -70,4 +73,7 @@ async def check_resources():
             logger.warning(str(e))
     
     for file_name in capoo_pic2_list:
-        check_md5(conn, cursor, fmd5, f"{capoo_pic2}/{capoo_filename.format(index=str(i))}")
+        with file_path.open("rb") as f:
+            data = f.read()
+        fmd5 = hashlib.md5(data).hexdigest()
+        check_md5(conn, cursor, fmd5, f"{capoo_pic2}/{file_name}")

@@ -65,12 +65,12 @@ async def pic():
         except:
             await picture.send(f'capoo出不来了，稍后再试试吧~')
 
-add = on_fullmatch('添加capoo', permission=SUPERUSER, priority=1, block=True)
+def reply_rule():
+    return capoo_download
+
+add = on_fullmatch('添加capoo', rule=reply_rule, permission=SUPERUSER, priority=1, block=True)
 @add.got("pic", prompt="请发送图片！")
 async def add_pic(pic_list: Message = Arg('pic')):
-    if capoo_download == False:
-        return
-    
     conn = sqlite3.connect(capoo_path / 'md5.db')
     cursor = conn.cursor()
     cursor.execute('''

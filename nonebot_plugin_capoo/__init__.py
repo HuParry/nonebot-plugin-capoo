@@ -2,9 +2,9 @@ from .config import Config, capoo_path, capoo_pic2_path, capoo_pic2
 from httpx import AsyncClient
 from .download import *
 import asyncio
-from nonebot.adapters.onebot.v11 import Bot, GroupMessageEvent, GROUP, MessageSegment, Message
+from nonebot.adapters.onebot.v11 import MessageSegment, Message
+from nonebot.adapters.onebot.v11 import GROUP, GROUP_ADMIN, GROUP_OWNER
 from nonebot.plugin import on_fullmatch, on_command
-from nonebot.permission import SUPERUSER
 from nonebot.log import logger
 from nonebot import get_driver
 import random
@@ -22,7 +22,10 @@ __plugin_meta__ = PluginMetadata(
     config=Config,
     supported_adapters = {"nonebot.adapters.onebot.v11"},
 )
-capoo_download = Config.parse_obj(get_driver().config.dict()).capoo_download
+capoo_config = Config.parse_obj(get_driver().config.dict())
+capoo_download = capoo_config.capoo_download
+capoo_add_allowed = capoo_config.capoo_add_allowed
+
 driver = get_driver()
 @driver.on_startup
 async def _():
@@ -65,10 +68,8 @@ async def pic():
         except:
             await picture.send(f'capoo出不来了，稍后再试试吧~')
 
-def reply_rule():
-    return capoo_download
 
-add = on_fullmatch('添加capoo', rule=reply_rule, permission=SUPERUSER, priority=1, block=True)
+add = on_fullmatch('添加capoo', permission= capoo_download and (GROUP_ADMIN | GROUP_OWNER), priority=1, block=True)
 @add.got("pic", prompt="请发送图片！")
 async def add_pic(pic_list: Message = Arg('pic')):
     conn = sqlite3.connect(capoo_path / 'md5.db')

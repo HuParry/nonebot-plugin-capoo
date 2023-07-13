@@ -24,7 +24,6 @@ __plugin_meta__ = PluginMetadata(
 )
 capoo_config = Config.parse_obj(get_driver().config.dict())
 capoo_download = capoo_config.capoo_download
-capoo_add_allowed = capoo_config.capoo_add_allowed
 
 driver = get_driver()
 @driver.on_startup

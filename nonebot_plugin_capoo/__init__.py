@@ -104,7 +104,7 @@ async def add_pic(pic_list: Message = Arg('pic')):
         fmd5 = hashlib.md5(data).hexdigest()
 
         capoo_cur_picnum = len( os.listdir(str(capoo_pic2_path)) )
-        if not check_md5(conn, cursor, fmd5, capoo_pic2 + str(capoo_cur_picnum + 1)) :
+        if not check_md5(conn, cursor, fmd5, f"{capoo_pic2}/{capoo_filename.format(index=str(capoo_cur_picnum + 1))}") :
             await add.send(pic + 
                             Message('\n这张已经有了，不能重复添加！')   
                         )

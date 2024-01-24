@@ -5,7 +5,7 @@ from nonebot.log import logger
 import sqlite3
 import hashlib
 import os
-from .sqlite import check_md5
+from .sqlite import check_md5, check_md5_force
 from .config import capoo_pic_path, capoo_path, \
     capoo_filename, capoo_pic, capoo_pic2_path, capoo_pic2
 
@@ -72,7 +72,7 @@ async def check_resources():
     
     capoo_pic2_list = os.listdir(str(capoo_pic2_path))
     for file_name in capoo_pic2_list:
-        with file_path.open("rb") as f:
+        with (capoo_pic2_path / file_name).open("rb") as f:
             data = f.read()
         fmd5 = hashlib.md5(data).hexdigest()
-        check_md5(conn, cursor, fmd5, f"{capoo_pic2}/{file_name}")
+        check_md5_force(conn, cursor, fmd5, f"{capoo_pic2}/{file_name}")

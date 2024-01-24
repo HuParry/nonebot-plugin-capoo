@@ -23,11 +23,15 @@ _✨ 一个发送指令就能让你的 bot 发出可爱的 capoo 的图片的插
 
 ## 📖 介绍
 
-capoo 实在是太可爱了，所以我收集了几百张 capoo 的表情包。这个插件用于让 bot 发送 capoo 的表清包。
+capoo 实在是太可爱了，所以我收集了几百张 capoo 的表情包。这个插件用于让 bot 发送 capoo 的表情包。
 
 一开始的版本只能简单地从我的图源里发送表情包，在 v0.1.0 后迎来了重大更新：超级用户可以在群聊里发送指令让 bot 存储表情包。并且插件会判断这个表情包在本地的图片文件夹里是否出现过，这样能避免重复加入某张图片。
 
 随机发送图片是利用的 sqlite3 库里的随机选择指令。
+
+如果你有更多可爱的、并且我未存储的，很欢迎你通过邮箱: [hu_parry@qq.com](mailto:hu_parry@qq.com) 私信我，我将很感谢你的扩充。
+
+注意：插件版本更新时可能会对数据库表的结构进行更新，如果你更新插件后发现数据库有报错，那么可以试着删除 `data/capoo` 路径下的 `md5.db` 文件，然后重新加载插件。
 
 ## 💿 安装
 
@@ -83,6 +87,9 @@ capoo 实在是太可爱了，所以我收集了几百张 capoo 的表情包。�
 假如你开启了本地图片存储，插件会自己从 [AC Git](https://git.acwing.com/HuParry/capoo) 图源里下载。你也可以自行手动下载，放置在你的 bot 项目根目录下的 `data/capoo/picture` 文件夹下。
 
 
+为了避免产生位置bug，`picture` 文件夹下的图片名称尽量不要修改！
+
+
 ## 🎉 使用
 ### 指令表
 | 指令 | 权限 | 需要@ | 范围 | 说明 |
@@ -96,12 +103,12 @@ capoo 实在是太可爱了，所以我收集了几百张 capoo 的表情包。�
 
 ### 效果图
 #### `capoo` 指令
-<img src="./docs/preview.jpg" style="zoom:30%;" />
+<img src="./docs/preview.jpg" width="375" />
 
 #### `添加capoo` 指令
-<img src="./docs/preview2.jpg" style="zoom:30%;" />
+<img src="./docs/preview2.jpg" width="375" />
 
-<img src="./docs/preview3.jpg" style="zoom:30%;" />
+<img src="./docs/preview3.jpg" width="375" />
 
 ## TODO
 - [x] 指令触发 bot 发送图片

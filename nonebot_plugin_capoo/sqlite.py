@@ -11,3 +11,13 @@ def check_md5(conn: sqlite3.Connection, cursor: sqlite3.Cursor, fmd5: str, pic_n
     cursor.execute('INSERT INTO Picture (md5, img_url) VALUES (?, ?)', (fmd5, pic_name))
     conn.commit()
     return True
+
+def check_md5_force(conn: sqlite3.Connection, cursor: sqlite3.Cursor, fmd5: str, pic_name: str) -> bool:
+    try:
+        cursor.execute('INSERT OR REPLACE INTO Picture (md5, img_url) VALUES (?, ?)', (fmd5, pic_name))
+        conn.commit()
+
+    except Exception as e:
+        return False
+    
+    return True

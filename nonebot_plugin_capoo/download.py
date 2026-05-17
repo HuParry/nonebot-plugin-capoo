@@ -2,12 +2,8 @@ import asyncio
 import httpx
 
 from nonebot.log import logger
-import sqlite3
-import hashlib
 import os
-from .sqlite import check_md5, check_md5_force
-from .config import capoo_pic_path, capoo_path, \
-    capoo_filename, capoo_pic, capoo_pic2_path, capoo_pic2
+from .config import capoo_pic_path, capoo_filename
 
 capoo_list_len = 456
 async def download_url(url: str) -> bytes:
@@ -19,60 +15,41 @@ async def download_url(url: str) -> bytes:
                 return resp.content
             except Exception as e:
                 logger.warning(f"Error downloading {url}, retry {i}/3: {e}")
-                await asyncio.sleep(3)
+                await asyncio.sleep(1)
     raise Exception(f"{url} 下载失败！")
 
 
 def resource_url(path: str) -> str:
-    return f"https://git.acwing.com/HuParry/capoo/-/raw/master/{path}"
+    return f"https://oss.huparry.cn/capoo/{path}"
 
 async def download_resources(path: str) -> bytes:
     return await download_url(resource_url(path))
 
 async def check_resources():
+    logger.info(f'Checking {capoo_pic_path} ...')
     if not capoo_pic_path.exists():
-        logger.info(f"未找到capoo文件夹，准备创建/capoo/picture文件夹...")
+        logger.info(f"未找到capoo文件夹，准备创建capoo/picture文件夹...")
         capoo_pic_path.mkdir(parents=True, exist_ok=True)
-    
-    if not capoo_pic2_path.exists():
-        logger.info(f"未找到capoo2文件夹，准备创建/capoo/your_picture文件夹...")
-        capoo_pic2_path.mkdir(parents=True, exist_ok=True)
-    conn = sqlite3.connect(capoo_path / 'md5.db')
-    cursor = conn.cursor()
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS Picture (
-            md5 TEXT PRIMARY KEY,
-            img_url TEXT
-        )
-    ''')
+    else:
+        file_num = len(os.listdir(capoo_pic_path))
+        if file_num >= capoo_list_len:
+            return
 
-    for i in range(1, capoo_list_len + 1) :
-        file_name = capoo_filename.format(index=str(i))
+    downloaded = 0
+    for i in range(1, capoo_list_len + 1):
+        file_name = capoo_filename.format(index=str(i).zfill(3))
         file_path = capoo_pic_path / file_name
         if file_path.exists():
-            with file_path.open("rb") as f:
-                data = f.read()
-            fmd5 = hashlib.md5(data).hexdigest()
-            check_md5(conn, cursor, fmd5, f"{capoo_pic}/{capoo_filename.format(index=str(i))}")
             continue
-        logger.info(f"Downloading {file_name} ...")
         try:
             data = await download_resources(file_name)
-            fmd5 = hashlib.md5(data).hexdigest()
-            
-            if (not check_md5(conn, cursor, fmd5, f"{capoo_pic}/{capoo_filename.format(index=str(i))}")) :
-                logger.info(f"文件夹中有相同的图片，本张照片跳过")
-                continue
-
             with file_path.open("wb") as f:
                 f.write(data)
-
+            downloaded += 1
         except Exception as e:
             logger.warning(str(e))
-    
-    capoo_pic2_list = os.listdir(str(capoo_pic2_path))
-    for file_name in capoo_pic2_list:
-        with (capoo_pic2_path / file_name).open("rb") as f:
-            data = f.read()
-        fmd5 = hashlib.md5(data).hexdigest()
-        check_md5_force(conn, cursor, fmd5, f"{capoo_pic2}/{file_name}")
+        bar_filled = int(i / capoo_list_len * 30)
+        bar = "█" * bar_filled + "░" * (30 - bar_filled)
+        print(f"\r下载图片:  [{bar}] {i}/{capoo_list_len} ({file_name})", end="", flush=True)
+    print()
+    logger.info(f"下载完成，共下载 {downloaded} 张图片")
